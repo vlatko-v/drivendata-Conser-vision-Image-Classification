@@ -7,14 +7,19 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import RocCurveDisplay
 
 from tensorflow.keras.preprocessing.image import array_to_img, img_to_array,load_img
 from tqdm import tqdm
 
+from itertools import cycle
+
+
+
 # from tensorflow.keras.applications import densenet 
 
 
-# Visualisation of site distributions
+# Visualization of site distributions
 
 def site_distributions(train, val, normalize = False):   
     fig, ax = plt.subplots(1,2, figsize = (12,5), sharey=True)
@@ -44,6 +49,28 @@ def site_distributions(train, val, normalize = False):
     plt.tight_layout()
 
 
+
+# Visualization training loss and accuracy
+
+def plot_metric(history):
+    plt.plot(history.history["accuracy"], label = "accuracy")
+    plt.plot(history.history["val_accuracy"], label = "val_accuracy")
+    plt.title('Model Accuracy')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Epoch')
+    plt.legend(['train', 'validation'], loc='upper left')
+    plt.show()
+
+
+def plot_loss(history):
+    plt.plot(history.history['loss'], label='loss')
+    plt.plot(history.history['val_loss'], label='val_loss')
+    plt.title('Model Loss (Cross Entropy)')
+    plt.ylim([0, 10])
+    plt.xlabel('Epoch')
+    plt.ylabel('Error')
+    plt.legend()
+    plt.grid(True)
 
 
 
@@ -146,3 +173,46 @@ def create_species_directory(df_train, df_val, home_path):
             target_path_val = os.path.join(home_path + r'/valid/' + species, image_id + '.jpg')
             
             shutil.copy(src = source_path_val, dst =  target_path_val)
+
+
+
+# Decode predictions 
+
+def decode_predictions(predictions, label_mapping):
+
+    def get_labels(predictions, label_mapping):
+      predicted_indices = np.argmax(predictions, axis=1) 
+      predicted_labels = [label_mapping[idx] for idx in predicted_indices]
+      return predicted_labels
+
+    predicted_labels = get_labels(predictions, label_mapping)
+    
+    df = pd.DataFrame({"predicted_labels": predicted_labels})
+
+    df = pd.get_dummies(df, columns=["predicted_labels"], dtype="int32", prefix="", prefix_sep="")
+    return df
+
+
+
+
+# custom ROC curve
+
+def roc_curve_total(y_true, y_pred, label_map):
+  fig, ax = plt.subplots(figsize=(7, 7))
+
+  colors = cycle(["aqua", "darkorange", "cornflowerblue", "red", "yellow", "pink", "green", "brown"])
+  for class_id, color in zip(range(8), colors):
+      RocCurveDisplay.from_predictions(
+          y_true.iloc[:, class_id],
+          y_pred.iloc[:, class_id],
+          name=label_map[class_id],
+          color=color,
+          ax=ax,
+          plot_chance_level=(class_id == 2),
+      )
+
+  _ = ax.set(
+      xlabel="False Positive Rate",
+      ylabel="True Positive Rate",
+      title="Macro-averaged One-vs-Rest\nReceiver Operating Characteristic",
+  )
