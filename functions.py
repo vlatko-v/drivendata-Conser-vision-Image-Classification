@@ -10,13 +10,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import RocCurveDisplay
 
 from tensorflow.keras.preprocessing.image import array_to_img, img_to_array,load_img
-from tensorflow import keras
-import tensorflow as tf
-from tensorflow.keras import backend as K
-from tensorflow.keras.models import Sequential
-from tensorflow.keras import Input, Model
-from tensorflow.keras.layers import Conv2D, Dense, MaxPooling2D, Activation, Flatten, Dropout, BatchNormalization
-import keras_tuner
 
 from tqdm import tqdm
 
@@ -181,102 +174,6 @@ def create_species_directory(df_train, df_val, home_path):
             target_path_val = os.path.join(home_path + r'/valid/' + species, image_id + '.jpg')
             
             shutil.copy(src = source_path_val, dst =  target_path_val)
-
-
-
-# Densenet Hypermodel for cross-validation
-
-class DensenetHypermodel(keras_tuner.HyperModel):
-
-  def build (self, hp = keras_tuner.HyperParameters()):
-
-
-      K.clear_session()
-
-      model = Sequential()
-
-      # Data Augmentation
-
-      model.add(tf.keras.layers.RandomRotation(factor = 0.4, fill_mode = "nearest"))
-      model.add(tf.keras.layers.RandomTranslation(height_factor = 0.2, width_factor = 0.2, fill_mode = "nearest"))
-      #model.add(keras_cv.layers.RandomShear(x_factor = 0.2, fill_mode = "nearest"))
-      model.add(tf.keras.layers.RandomZoom(height_factor = (-0.3, 0.3), fill_mode = "nearest"))
-      #model.add(tf.keras.layers.RandomBrightness(factor = 0.1, value_range = [0, 1]))
-      #model.add(keras_cv.layers.RandomSaturation(factor = (0.4,0.6)))
-      model.add(tf.keras.layers.RandomFlip("horizontal"))
-
-
-      model.add(densenet_base)
-
-      model.add(Flatten())
-      model.add(BatchNormalization())
-
-
-      #Layer 1
-
-      model.add(Dense(units = hp.Choice("units_1", [64, 128, 256, 512]),
-                      kernel_initializer = hp.Choice("kernel_init", ["uniform", "glorot_uniform", "glorot_normal"]),
-                      kernel_regularizer = keras.regularizers.L2(hp.Float("kernel_reg_1", min_value=1e-4, max_value=1e-1, sampling = "log")),
-                      name = "dense1"))
-      if hp.Boolean("dropout_layer_1"):
-        model.add(Dropout(rate = hp.Float("dropout_rate_1", min_value = 0, max_value = 0.5, step = 0.1)))
-      model.add(BatchNormalization())
-      model.add(Activation(hp.Choice("activation", ["relu","gelu","selu"])))
-
-
-    # Layer 2
-
-      model.add(Dense(units = hp.Choice("units_2", [64, 128, 256, 512]),
-                      kernel_initializer = hp.Choice("kernel_init", ["uniform", "glorot_uniform", "glorot_normal"]),
-                      kernel_regularizer = keras.regularizers.L2(hp.Float("kernel_reg_2", min_value=1e-4, max_value=1e-1, sampling = "log")),
-                      name = "dense2"))
-      if hp.Boolean("dropout_layer_2"):
-        model.add(Dropout(rate = hp.Float("dropout_rate_2", min_value = 0, max_value = 0.5, step = 0.1)))
-      model.add(BatchNormalization())
-      model.add(Activation(hp.Choice("activation", ["relu","gelu","selu"])))
-
-
-      # Layer 3
-
-      #model.add(Dense(units = hp.Choice("units_3", [16, 32, 64, 128, 256]),
-      #                kernel_initializer = hp.Choice("kernel_init", ["uniform", "glorot_uniform", "glorot_normal"]),
-      #                kernel_regularizer = keras.regularizers.L2(hp.Float("kernel_reg_3", min_value=1e-4, max_value=1e-1, sampling = "log")),
-      #                name = "dense3"))
-      #if hp.Boolean("dropout_layer_3"):
-      #  model.add(Dropout(rate = hp.Float("dropout_rate_3", min_value = 0.1, max_value = 0.5, step = 0.1)))
-      #model.add(BatchNormalization())
-      #model.add(Activation(hp.Choice("activation", ["relu","gelu","selu"])))
-
-
-
-      # Output layer (softmax)
-      model.add(Dense(units = 8, activation = "softmax", name = "output"))
-
-
-
-      #compiling model
-
-      lr = hp.Float("lr", min_value = 1e-4, max_value = 1e-1, sampling = "log")
-
-      optimizers_dict = {
-          "adam":    keras.optimizers.Adam(learning_rate = lr),
-          "sgd":     keras.optimizers.SGD(learning_rate = lr, momentum =  hp.Float("momentum", min_value = 0.85, max_value = 0.95)),
-          "rmsprop": keras.optimizers.RMSprop(learning_rate = lr)
-          }
-
-      hp_optimizers = hp.Choice('optimizer', values=["adam", "sgd", "rmsprop"])
-
-
-      model.compile(optimizer = optimizers_dict[hp_optimizers], metrics = ["accuracy"],
-                    loss = tf.keras.losses.CategoricalCrossentropy())
-
-      return model
-
-
-  def fit(self, hp, model, *args, **kwargs):
-      return model.fit(*args, batch_size = hp.Choice("batch_size", [32, 64, 128, 256]), **kwargs)
-
-
 
 
 
