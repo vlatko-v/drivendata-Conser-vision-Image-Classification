@@ -165,3 +165,12 @@ cython_debug/
 data
 preview
 .python-version
+
+
+# models 
+densenet_model
+densenet_model_aug
+
+# benchmark notebook
+
+benchmark.ipynb
