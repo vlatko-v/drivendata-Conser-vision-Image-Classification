@@ -171,7 +171,7 @@ In terms of Categorical Cross-Entropy loss, the validation score was much closer
 
 </br>
 
-**Confusion matrix**
+**Distribution of target variable classes and Confusion matrix**
 
 <img src="visuals/distribution_actual_pred.png" width="400">
 
