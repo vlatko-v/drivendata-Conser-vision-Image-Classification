@@ -62,8 +62,8 @@ In addition, the dataset contains images without any animals (Blank).
 
 Here are a few examples:
 
-<img src="visuals/bird_antelope.png" width="620">
-<img src="visuals/hog_leopard.png" width="620">
+<img src="visuals/bird_antelope.png" width="700">
+<img src="visuals/hog_leopard.png" width="700">
 
 
 </br>
@@ -212,6 +212,10 @@ Because it has learned some clear patterns from certain images, the model can be
 * Prosimian monkeys (**F1-Score: 0.46 and AUC: 0.83**)
 
 Unforunately, for all the other species, the model performs rather poorly. One of the reasons might be the fact that some of the species are small in comparison and/or only appear at night. Another reason is, as highlighted above, the fact that the model focused too much attention on the surroundings rather than the animal itself.
+
+Finally, here are a few examples of how the model classified the species in the validation set:
+
+<img src="visuals/predicted_images.png" width="650">
 
 </br>
 
