@@ -4,7 +4,7 @@ Camera traps are a tool used by conservationists to study and monitor a wide ran
 
 Using real-life images from the **Taï National Park in Côte d'Ivoire**, this project applies Transfer Learning to create an image detection model based on Convolutional Neural Networks (CNN) that is suitable for classifying 7 types of animal species.
 
-<img src="data/train_features/ZJ006171.jpg" width="700">
+<img src="visuals/ZJ004548.jpg" width="700">
 
 </br>
 
@@ -62,8 +62,7 @@ In addition, the dataset contains images without any animals (Blank).
 
 Here are a few examples:
 
-<img src="visuals/bird.png" width="300">
-<img src="visuals/antelope.png" width="280">
+<img src="visuals/bird_antelope.png" width="620">
 <img src="visuals/hog_leopard.png" width="620">
 
 
@@ -83,7 +82,7 @@ This section of the project explores the data with respect to:
 
 **Distribution of species**
 
-<img src="visuals/distribution_species.png" width="400">
+<img src="visuals/distribution_species.png" width="500">
 
 This is an unbalanced dataset. Ideally, each species (plus the "blank" class) would appear in 12.5% of all images. Here, however, some species appear only ~6% of the time (hog), while others appear in over 15% of the images (prosimian monkey).
 
@@ -91,7 +90,7 @@ This is an unbalanced dataset. Ideally, each species (plus the "blank" class) wo
 
 **Distribution of sites**
 
-<img src="visuals/distribution_sites.png" width="400">
+<img src="visuals/distribution_sites.png" width="500">
 
 Some sites contain many more images than others. It is therefore possible that cameras at some of the less frequent locations observed only a smaller subset of species, which could skew model results later on.
 
@@ -99,7 +98,7 @@ Some sites contain many more images than others. It is therefore possible that c
 
 **Variety of species' locations**
 
-<img src="visuals/distribution_sites_species.png" width="400">
+<img src="visuals/distribution_sites_species.png" width="500">
 
 Some species appear only in a small number of different locations, while others get around a lot. The former may potentially bias the model's learning. The model might specificially not recognize the species that frequent a small number of forest areas, but rather focus on the surroundings as a more significant input for identifying those species.
 
@@ -125,9 +124,7 @@ Here are some of the transformations that were applied:
 
 Here is an example of how image transformations affect an image:
 
-<img src="visuals/aug1.jpeg" width="200">
-<img src="visuals/aug2.jpeg" width="200">
-<img src="visuals/aug3.jpeg" width="200">
+<img src="visuals/aug_monkey.png" width="750"> 
 
 </br>
 
@@ -166,12 +163,9 @@ Since choosing the right metric depends on project goals, different classificati
 
 ### Model performance
 
-<img src="visuals/accuracy_epochs.png" width="400">
-<img src="visuals/loss_epochs.png" width="400">
+<img src="visuals/accuracy_loss_epochs.png" width="750">
 
 At a meager 41% accuracy on the validation set, the model with image augmentation did not do a great job at classifying the species correctly.
-
-
 
 In terms of Categorical Cross-Entropy loss, the validation score was much closer to the training dataset. Both sets, however, cannot boast a very low loss (2.1 for the validation set).
 
@@ -179,12 +173,9 @@ In terms of Categorical Cross-Entropy loss, the validation score was much closer
 
 **Confusion matrix**
 
-Actual distribution (left) vs Predicted distribution (right)
+<img src="visuals/distribution_actual_pred.png" width="400">
 
-<img src="visuals/distribution_actual.png" width="200">
-<img src="visuals/distribution_predicted.png" width="195">
-
-<img src="visuals/confusion_matrix.png" width="450">
+<img src="visuals/confusion_matrix.png" width="500">
 
 </br>
 
