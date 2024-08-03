@@ -40,6 +40,7 @@ The data was obtained from the DrivenData website:
 
 ## Resources used
 * **Python version:** pyenv with python 3.11.3
+* **Cloud System**: Google Colab
 * **EDA Packages**: pandas, numpy, matplotlib, seaborn
 * **Deep Learning Packages**: Keras, Tensorflow, Scikit-Learn
 
