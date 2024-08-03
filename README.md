@@ -1,4 +1,4 @@
-# Conser-Vision Image Classification: Exploratory Data Analysis
+# Conser-Vision: Classifying Images of Wildlife Species
 
 Camera traps are a tool used by conservationists to study and monitor a wide range of ecologies while limiting human interference. However, they also generate a vast amount of data that quickly exceeds the capacity of humans to sift through. Machine learning and advances in computer vision can help automate tasks such as species detection and identification, so that humans can spend more time learning from and protecting these ecologies and spend less time manually classifying animal species.
 
