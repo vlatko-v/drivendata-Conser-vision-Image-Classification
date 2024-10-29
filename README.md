@@ -168,7 +168,7 @@ Since choosing the right metric depends on project goals, different classificati
 
 Overall, at a 41% accuracy on the validation set, the model with image augmentation did not do a great job at classifying the species correctly.
 
-In terms of Categorical Cross-Entropy loss, the validation score was much closer to the training dataset. Both sets, however, cannot boast a very low loss (2.1 for the validation set).
+In terms of Categorical Cross-Entropy loss, the validation score was much closer to the training dataset. Neither sets can, however, boast a low loss of less than 1 (2.1 for the validation set).
 
 </br>
 
